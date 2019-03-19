@@ -432,7 +432,7 @@ module IteratorsMD
         iterfirst, iterfirst
     end
     @inline function iterate(r::Reverse{<:CartesianIndices}, state)
-        valid, I = dec(state.I, last(r.itr).I, first(r.itr).I)
+        valid, I = dec((), state.I, last(r.itr).I, first(r.itr).I)
         valid || return nothing
         return I, I
     end
