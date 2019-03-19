@@ -302,6 +302,7 @@ julia> mapreduce(isodd, |, a, dims=1)
 ```
 """
 mapreduce(f, op, A::AbstractArray; dims=:, kw...) = _mapreduce_dim(f, op, kw.data, A, dims)
+mapreduce(f, op, A::AbstractArray...; kw...) = reduce(op, map(f, A...); kw...)
 
 _mapreduce_dim(f, op, nt::NamedTuple{(:init,)}, A::AbstractArray, ::Colon) = mapfoldl(f, op, A; nt...)
 
