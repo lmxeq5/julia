@@ -233,7 +233,7 @@ INSTALL_M := $(JULIAHOME)/contrib/install.sh 755
 
 # BinaryBuilder options.  We default to "on" for all the projects listed in BB_PROJECTS
 USE_BINARYBUILDER := 1
-BB_PROJECTS := OPENBLAS LLVM SUITESPARSE OPENLIBM GMP
+BB_PROJECTS := OPENBLAS LLVM SUITESPARSE OPENLIBM GMP MBEDTLS
 $(foreach proj,$(BB_PROJECTS),$(eval USE_BINARYBUILDER_$(proj) = $(USE_BINARYBUILDER)))
 
 # Use the Assertions build
