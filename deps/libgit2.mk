@@ -18,6 +18,8 @@ $(BUILDDIR)/$(LIBGIT2_SRC_DIR)/build-configured: | $(build_prefix)/manifest/curl
 endif
 endif
 
+ifneq ($(USE_BINARYBUILDER_LIBGIT2),1)
+
 LIBGIT2_OPTS := $(CMAKE_COMMON) -DCMAKE_BUILD_TYPE=Release -DTHREADSAFE=ON -DUSE_BUNDLED_ZLIB=ON
 ifeq ($(OS),WINNT)
 LIBGIT2_OPTS += -DWIN32=ON -DMINGW=ON
@@ -117,3 +119,10 @@ $(build_datarootdir)/julia/cert.pem: $(SRCCACHE)/cacert-$(MOZILLA_CACERT_VERSION
 $(build_prefix)/manifest/libgit2: $(build_datarootdir)/julia/cert.pem # use libgit2 install status
 libgit2-install-mozilla-cacert: $(build_datarootdir)/julia/cert.pem
 get-libgit2: $(SRCCACHE)/cacert-$(MOZILLA_CACERT_VERSION).pem
+
+else # USE_BINARYBUILDER_LIBGIT2
+
+LIBGIT2_BB_URL_BASE := https://github.com/JuliaPackaging/Yggdrasil/releases/download/LibGit2-v$(LIBGIT2_VER)-$(LIBGIT2_BB_REL)
+LIBGIT2_BB_NAME := LibGit2.v$(LIBGIT2_VER)
+$(eval $(call bb-install,libgit2,LIBGIT2,false))
+endif

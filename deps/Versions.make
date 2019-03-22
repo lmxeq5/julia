@@ -22,6 +22,8 @@ LIBSSH2_VER = 1.8.0
 LIBSSH2_BB_REL = 1
 CURL_VER = 7.61.0
 CURL_BB_REL = 0
+LIBGIT2_VER = 0.27.7
+LIBGIT2_BB_REL = 0
 
 # Specify the version of the Mozilla CA Certificate Store to obtain.
 # The versions of cacert.pem are identified by the date (YYYY-MM-DD) of their changes.
