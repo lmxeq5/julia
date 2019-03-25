@@ -105,9 +105,17 @@ configure-libgit2: $(BUILDDIR)/$(LIBGIT2_SRC_DIR)/build-configured
 compile-libgit2: $(BUILDDIR)/$(LIBGIT2_SRC_DIR)/build-compiled
 fastcheck-libgit2: #none
 check-libgit2: $(BUILDDIR)/$(LIBGIT2_SRC_DIR)/build-checked
+$(build_prefix)/manifest/libgit2: $(build_datarootdir)/julia/cert.pem # use libgit2 install status
 
+else # USE_BINARYBUILDER_LIBGIT2
 
-# Also download and install a cacert.pem file:
+LIBGIT2_BB_URL_BASE := https://github.com/JuliaPackaging/Yggdrasil/releases/download/LibGit2-v$(LIBGIT2_VER)-$(LIBGIT2_BB_REL)
+LIBGIT2_BB_NAME := LibGit2.v$(LIBGIT2_VER)
+$(eval $(call bb-install,libgit2,LIBGIT2,false))
+endif
+
+# Also download and install a cacert.pem file, regardless of whether or not
+# we're using BinaryBuilder-sourced binaries
 $(SRCCACHE)/cacert-$(MOZILLA_CACERT_VERSION).pem:
 	$(JLDOWNLOAD) $@ https://curl.haxx.se/ca/cacert-$(MOZILLA_CACERT_VERSION).pem
 
@@ -116,13 +124,7 @@ $(build_datarootdir)/julia/cert.pem: $(SRCCACHE)/cacert-$(MOZILLA_CACERT_VERSION
 	mkdir -p $(build_datarootdir)/julia
 	cp $< $@
 
-$(build_prefix)/manifest/libgit2: $(build_datarootdir)/julia/cert.pem # use libgit2 install status
+# Always include this `.pem` file as a prereq
 libgit2-install-mozilla-cacert: $(build_datarootdir)/julia/cert.pem
 get-libgit2: $(SRCCACHE)/cacert-$(MOZILLA_CACERT_VERSION).pem
 
-else # USE_BINARYBUILDER_LIBGIT2
-
-LIBGIT2_BB_URL_BASE := https://github.com/JuliaPackaging/Yggdrasil/releases/download/LibGit2-v$(LIBGIT2_VER)-$(LIBGIT2_BB_REL)
-LIBGIT2_BB_NAME := LibGit2.v$(LIBGIT2_VER)
-$(eval $(call bb-install,libgit2,LIBGIT2,false))
-endif
