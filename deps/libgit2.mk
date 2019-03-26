@@ -112,6 +112,9 @@ else # USE_BINARYBUILDER_LIBGIT2
 LIBGIT2_BB_URL_BASE := https://github.com/JuliaPackaging/Yggdrasil/releases/download/LibGit2-v$(LIBGIT2_VER)-$(LIBGIT2_BB_REL)
 LIBGIT2_BB_NAME := LibGit2.v$(LIBGIT2_VER)
 $(eval $(call bb-install,libgit2,LIBGIT2,false))
+
+# BB tarball doesn't create a manifest, so directly depend the `install` target
+install-libgit2: $(build_datarootdir)/julia/cert.pem
 endif
 
 # Also download and install a cacert.pem file, regardless of whether or not
@@ -124,7 +127,6 @@ $(build_datarootdir)/julia/cert.pem: $(SRCCACHE)/cacert-$(MOZILLA_CACERT_VERSION
 	mkdir -p $(build_datarootdir)/julia
 	cp $< $@
 
-# Always include this `.pem` file as a prereq
-libgit2-install-mozilla-cacert: $(build_datarootdir)/julia/cert.pem
+# When "get"'ing libgit2, download the .pem
 get-libgit2: $(SRCCACHE)/cacert-$(MOZILLA_CACERT_VERSION).pem
 
